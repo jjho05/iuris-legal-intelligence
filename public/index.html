@@ -2,252 +2,659 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Iuris Legal Intelligence — Análisis Jurídico, Contratos y Legislación Vigente</title>
-  <meta name="description" content="Plataforma profesional de análisis legal, dictamen de contratos y consulta de leyes vigentes con Gemini 3.8 Flash y grounding web.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Iuris Legal Intelligence — Análisis Contractual & Legislación Federal</title>
+  <meta name="description" content="Plataforma profesional de análisis jurídico, auditoría de contratos y cálculo de derechos laborales conforme a la Ley Federal del Trabajo.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <!-- ======================================================================
-       HEADER INSTITUCIONAL Y SOBRIO
+       HEADER INSTITUCIONAL Y SOBRIO (ESTILO HARVEY / STRIPE)
        ====================================================================== -->
-  <header class="legal-header">
-    <div class="header-inner">
-      <div class="brand-block">
-        <div class="brand-crest">
+  <header class="app-header">
+    <div class="header-container">
+      
+      <div class="header-brand">
+        <div class="brand-symbol" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 3v18"/>
             <rect x="3" y="7" width="18" height="13" rx="2"/>
             <path d="M6 7l6-4 6 4"/>
           </svg>
         </div>
-        <div>
-          <h1 class="brand-title">Iuris <span class="brand-edition">Legal Intelligence</span></h1>
-          <p class="brand-tagline">Análisis de Contratos & Legislación Federal</p>
+        <div class="brand-meta">
+          <div class="brand-title-line">
+            <span class="brand-title">Iuris</span>
+            <span class="brand-subtitle">Legal Intelligence</span>
+            <span class="brand-version-badge">v2.0</span>
+          </div>
+          <span class="brand-caption desktop-only">Auditoría Contractual & Legislación Federal</span>
         </div>
       </div>
 
-      <!-- Selector de Marco Legal en Header (Desktop) -->
-      <div class="corpus-switcher-wrap">
-        <label for="select-legal-framework" class="sr-only">Marco Legal</label>
-        <div class="framework-select-custom">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <!-- Selector de Marco Legal (Adaptable Móvil y Desktop) -->
+      <div class="header-framework-control">
+        <label for="select-legal-framework" class="sr-only">Marco Normativo</label>
+        <div class="select-wrapper">
+          <svg class="select-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
           <select id="select-legal-framework">
             <option value="corporativo">Estatuto Corporativo & Cumplimiento</option>
-            <option value="lft">Ley Federal del Trabajo (LFT / Laboral)</option>
-            <option value="custom" disabled id="opt-custom-doc">Documento Cargado (Sin archivo)</option>
+            <option value="lft">Ley Federal del Trabajo (LFT)</option>
+            <option value="custom" disabled id="opt-custom-doc">Expediente Subido (Sin archivo)</option>
           </select>
         </div>
       </div>
 
-      <!-- Acciones de Cabecera -->
-      <div class="header-controls">
-        <!-- Toggle Búsqueda Web de Leyes -->
-        <label class="web-search-toggle" title="Habilita búsqueda en internet de reformas, jurisprudencia y leyes vigentes">
+      <!-- Botones de Acción de Cabecera -->
+      <div class="header-actions">
+        <!-- Toggle Web DOF -->
+        <label class="toggle-control desktop-only" title="Grounding web con el Diario Oficial de la Federación">
           <input type="checkbox" id="toggle-web-search" checked>
-          <span class="toggle-track"></span>
-          <span class="toggle-label">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            <span>Búsqueda Web</span>
-          </span>
+          <span class="toggle-slider"></span>
+          <span class="toggle-text">DOF en Vivo</span>
         </label>
 
         <!-- Botón Subir Archivo -->
-        <button class="btn-legal-action" id="btn-trigger-upload" title="Subir contrato o ley (PDF o Word)">
+        <button class="btn-header-upload" id="btn-trigger-upload" title="Subir contrato o estatuto">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <span class="btn-text">Subir Documento</span>
+          <span class="btn-header-label">Subir Contrato</span>
         </button>
 
-        <!-- Botón Configurar API Key -->
-        <button class="btn-icon-subtle" id="btn-open-key-modal" title="Configurar API Key de Gemini">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-2-2l2 2"/><path d="M15.5 8.5l-7.79 7.79a2.5 2.5 0 0 1-1.77.73H3.5v-2.44a2.5 2.5 0 0 1 .73-1.77L12 5.02"/><circle cx="16.5" cy="7.5" r="3.5"/></svg>
-        </button>
-
-        <!-- Botón Móvil para Abrir Panel Documental -->
-        <button class="btn-icon-subtle mobile-only" id="btn-toggle-drawer" title="Ver Expediente / Cláusulas">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+        <!-- Botón Ajustes / API Key -->
+        <button class="btn-header-icon" id="btn-open-key-modal" title="Configurar API Key">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
       </div>
+
     </div>
   </header>
 
   <!-- ======================================================================
-       ÁREA PRINCIPAL DE TRABAJO
+       SEGMENTED TABS DE NAVEGACIÓN (RESPONSIVE TOUCH SCROLL)
        ====================================================================== -->
-  <main class="legal-workspace">
-    <div class="workspace-layout">
+  <nav class="navigation-bar" aria-label="Secciones de la suite">
+    <div class="navigation-container">
+      
+      <button class="nav-tab-item active" data-tab="dictamen">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Dictamen Jurídico</span>
+      </button>
 
-      <!-- COLUMNA PRINCIPAL: CHAT JURÍDICO & CONSULTAS -->
-      <section class="main-chat-view">
-        
-        <!-- BARRA DE CONTEXTO ACTIVO -->
-        <div class="context-indicator-bar">
-          <div class="context-pill">
-            <span class="pill-dot"></span>
-            <span class="pill-text" id="active-context-label">Marco: Estatuto Corporativo & Cumplimiento</span>
-          </div>
-          <div class="model-tag-subtle">
-            <span>Gemini 3.8 Flash</span>
-          </div>
-        </div>
+      <button class="nav-tab-item" data-tab="riesgos">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>Matriz de Riesgos</span>
+        <span class="nav-indicator-pill" id="risk-pill-badge">Auditoría</span>
+      </button>
 
-        <!-- LISTA DE MENSAJES -->
-        <div class="chat-thread" id="chat-thread">
-          <div class="thread-message assistant-row">
-            <div class="message-meta-line">
-              <span class="meta-author">Iuris Legal Intelligence</span>
-              <span class="meta-time">Asesor Jurídico</span>
-            </div>
-            <div class="message-content">
-              <p>Bienvenido a <b>Iuris Legal Intelligence</b>. Esta plataforma está configurada para el análisis riguroso de normativas corporativas, contratos mercantiles y la <b>Ley Federal del Trabajo (LFT)</b>.</p>
-              <p style="margin-top: 0.6rem;">Puedes formular consultas legales fácticas, contrastar cláusulas con leyes vigentes en internet, o <b>subir un contrato en PDF o Word</b> para convertirlo a Markdown y auditar penalizaciones, riesgos y obligaciones.</p>
-            </div>
-          </div>
-        </div>
+      <button class="nav-tab-item" data-tab="laboral">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Calculadora LFT</span>
+        <span class="nav-indicator-pill pill-emerald">Art. 76</span>
+      </button>
 
-        <!-- CHIPS SUGERIDOS SOBRIOS -->
-        <div class="suggested-queries-bar" id="suggested-queries">
-          <button class="query-chip" data-query="¿Cuáles son los días de vacaciones según la reforma de vacaciones dignas de la LFT?">
-            Vacaciones Dignas (Art. 76 LFT)
-          </button>
-          <button class="query-chip" data-query="¿Cuál es el plazo de aviso y penalización económica por rescisión contractual?">
-            Rescisión & 15% Penalidad
-          </button>
-          <button class="query-chip" data-query="¿Qué vigencia tiene la confidencialidad de un secreto industrial y cuál es la indemnización?">
-            Confidencialidad NDA (5 años)
-          </button>
-          <button class="query-chip" data-query="¿A qué correo solicito mis derechos ARCO y cuál es el plazo legal de dictamen?">
-            Derechos ARCO (20 días hábiles)
-          </button>
-        </div>
-
-        <!-- INPUT BAR RESPONSIVA -->
-        <div class="chat-composer-wrap">
-          <form id="chat-composer-form" class="composer-form">
-            <textarea 
-              id="composer-input" 
-              class="composer-textarea" 
-              rows="1" 
-              placeholder="Formula una consulta jurídica o solicita el análisis de una cláusula..."
-              required
-            ></textarea>
-            <div class="composer-controls">
-              <!-- Botón Adjuntar Archivo en barra de texto -->
-              <button type="button" class="composer-btn-attach" id="btn-attach-file" title="Adjuntar PDF o Word">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-              </button>
-              <button type="submit" class="composer-btn-submit" id="btn-composer-submit" title="Enviar consulta">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              </button>
-            </div>
-          </form>
-          <div class="composer-disclaimer">
-            <span>Las opiniones emitidas se sustentan en el articulado activo y fuentes oficiales del Estado. No sustituyen el patrocinio judicial letrado.</span>
-          </div>
-        </div>
-
-      </section>
-
-      <!-- COLUMNA LATERAL: GESTOR DOCUMENTAL, CONVERTIDOR MD Y CITAS -->
-      <aside class="sidebar-document-view" id="document-sidebar">
-        <div class="sidebar-header">
-          <div class="sidebar-tabs">
-            <button class="sidebar-tab active" id="tab-btn-document">Expediente & Markdown</button>
-            <button class="sidebar-tab" id="tab-btn-citations">Citas & Fuentes</button>
-          </div>
-          <button class="sidebar-close-btn mobile-only" id="btn-close-sidebar">&times;</button>
-        </div>
-
-        <!-- PANEL 1: DOCUMENTO ACTIVO Y CONVERTIDOR MARKDOWN -->
-        <div class="sidebar-panel active" id="panel-document">
-          
-          <!-- ZONA DROPZONE PARA SUBIR ARCHIVOS -->
-          <div class="upload-dropzone" id="upload-dropzone">
-            <input type="file" id="file-input" accept=".pdf,.docx,.doc,.txt,.md" style="display: none;">
-            <div class="dropzone-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-            </div>
-            <div class="dropzone-text">
-              <b>Cargar Contrato o Archivo Legal</b>
-              <span>PDF o Word (.docx) · Conversión automática a Markdown</span>
-            </div>
-          </div>
-
-          <!-- FICHA DEL DOCUMENTO CARGADO -->
-          <div class="document-metadata-card" id="doc-meta-card" style="display: none;">
-            <div class="meta-card-header">
-              <span class="meta-doc-name" id="doc-name-label">contrato.docx</span>
-              <span class="meta-doc-badge" id="doc-type-badge">Word DOCX</span>
-            </div>
-            <div class="meta-stats-row">
-              <span id="doc-words-stat">0 palabras</span> · 
-              <span id="doc-sections-stat">0 cláusulas detectadas</span>
-            </div>
-            <div class="meta-actions-row">
-              <button class="btn-text-action" id="btn-copy-md">Copiar Markdown</button>
-              <button class="btn-text-action" id="btn-download-md">Descargar .md</button>
-            </div>
-          </div>
-
-          <!-- VISOR DE TEXTO / MARKDOWN -->
-          <div class="document-content-viewer">
-            <div class="viewer-header">
-              <span>Estructura Jurídica Indexada</span>
-            </div>
-            <pre class="markdown-preview" id="markdown-viewer"><code>Selecciona un marco legal o sube un documento PDF/Word para auditar sus cláusulas en formato Markdown estructurado.</code></pre>
-          </div>
-
-        </div>
-
-        <!-- PANEL 2: CITAS Y FUENTES WEB EN VIVO -->
-        <div class="sidebar-panel" id="panel-citations">
-          <div class="citations-container">
-            <div class="citations-header">
-              <span>Fuentes Normativas & Enlaces Oficiales</span>
-            </div>
-            <div class="citations-list" id="citations-list">
-              <p class="empty-citations-hint">Formula una consulta para auditar las citas textuales de leyes federales o fragmentos de contratos recuperados.</p>
-            </div>
-          </div>
-        </div>
-
-      </aside>
+      <button class="nav-tab-item" data-tab="expediente">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <span>Expediente Digital</span>
+        <span class="nav-indicator-pill" id="doc-active-badge">Markdown</span>
+      </button>
 
     </div>
+  </nav>
+
+  <!-- ======================================================================
+       CONTENEDOR DE PANELES DE TRABAJO (FLUID & SCROLLABLE)
+       ====================================================================== -->
+  <main class="panels-container">
+
+    <!-- ====================================================================
+         TAB 1: DICTAMEN JURÍDICO & CONSULTAS PERICIALES
+         ==================================================================== -->
+    <section class="panel-section active" id="tab-panel-dictamen">
+      <div class="panel-layout-split">
+        
+        <!-- Columna de Dictámenes -->
+        <div class="memos-main-column">
+          
+          <!-- Barra de Estado de Expediente -->
+          <div class="expediente-meta-strip">
+            <div class="expediente-info-left">
+              <span class="status-dot"></span>
+              <span class="expediente-label" id="active-context-label">Estatuto Corporativo Base</span>
+              <span class="expediente-ref" id="case-id-label">EXP-2026-088</span>
+            </div>
+            <div class="expediente-info-right">
+              <span class="engine-tag">Gemini 3.8 Flash</span>
+              <button class="btn-reset-thread" id="btn-clear-memos" title="Reiniciar vista">Reiniciar</button>
+            </div>
+          </div>
+
+          <!-- Feed de Dictámenes & Consultas -->
+          <div class="memos-feed" id="chat-thread">
+            
+            <!-- Tarjeta de Bienvenida Sobria -->
+            <div class="hero-dossier-card" id="welcome-memo-card">
+              
+              <div class="hero-dossier-heading">
+                <div class="heading-badge">SISTEMA PERICIAL JURÍDICO</div>
+                <h2 class="hero-dossier-title">Centro de Dictamen & Cumplimiento Normativo</h2>
+                <p class="hero-dossier-desc">Herramienta técnica para la interpretación de marcos regulatorios federales, auditoría de penalizaciones y cálculo de derechos laborales conforme a derecho.</p>
+              </div>
+
+              <!-- Acciones Rápidas Profesionales -->
+              <div class="quick-actions-list">
+                
+                <button class="quick-action-btn" data-action="audit-rescision">
+                  <div class="action-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  </div>
+                  <div class="action-details">
+                    <span class="action-name">Auditar Cláusula de Rescisión Contractual</span>
+                    <span class="action-sub">Plazos de preaviso, causales graves y porcentaje de penalización económica (15%).</span>
+                  </div>
+                  <div class="action-arrow">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
+                </button>
+
+                <button class="quick-action-btn" data-action="audit-nda">
+                  <div class="action-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </div>
+                  <div class="action-details">
+                    <span class="action-name">Blindaje de Confidencialidad & Secreto Industrial</span>
+                    <span class="action-sub">Vigencia legal de 5 años e indemnización tasada en $50,000 USD según contrato.</span>
+                  </div>
+                  <div class="action-arrow">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
+                </button>
+
+                <button class="quick-action-btn" data-action="audit-lft-vacaciones">
+                  <div class="action-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  </div>
+                  <div class="action-details">
+                    <span class="action-name">Consultar Reforma de Vacaciones Dignas (LFT)</span>
+                    <span class="action-sub">Tabla del Art. 76 LFT: días garantizados de descanso y prima vacacional legal.</span>
+                  </div>
+                  <div class="action-arrow">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
+                </button>
+
+                <button class="quick-action-btn" data-action="extract-json">
+                  <div class="action-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                  </div>
+                  <div class="action-details">
+                    <span class="action-name">Extracción Tipada de Obligaciones (JSON Pydantic)</span>
+                    <span class="action-sub">Generación de estructura técnica de cláusulas validada por esquema de datos.</span>
+                  </div>
+                  <div class="action-arrow">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                  </div>
+                </button>
+
+              </div>
+
+              <!-- Banner de Ingestión -->
+              <div class="upload-feature-box">
+                <div class="feature-box-content">
+                  <div class="feature-box-title">Auditar un Contrato Externo (Word o PDF)</div>
+                  <div class="feature-box-text">El sistema procesa el documento localmente, lo convierte a Markdown y extrae las cláusulas críticas para su análisis inmediato.</div>
+                </div>
+                <button class="btn-feature-upload" id="btn-callout-upload">Seleccionar Archivo</button>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Barra de Composer (Fija o integrada, adaptable a móvil) -->
+          <div class="memos-composer-container">
+            <form id="chat-composer-form" class="composer-form-box">
+              <div class="composer-input-row">
+                <textarea 
+                  id="composer-input" 
+                  class="composer-textarea-field" 
+                  rows="1" 
+                  placeholder="Formula una consulta jurídica o solicita auditar una cláusula..."
+                  required
+                ></textarea>
+                
+                <div class="composer-btn-group">
+                  <button type="button" class="btn-composer-attach" id="btn-attach-file" title="Adjuntar PDF o DOCX">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                  </button>
+                  <button type="submit" class="btn-composer-send" id="btn-composer-submit" title="Emitir consulta">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    <span class="btn-send-label">Dictaminar</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+            <div class="composer-legal-disclaimer">
+              <span>Fundamentado en marcos jurídicos federales oficiales. No constituye patrocinio letrado en juicio.</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Columna Lateral de Contexto y Referencias (Desktop) -->
+        <aside class="context-sidebar-column">
+          
+          <div class="sidebar-box">
+            <div class="sidebar-box-header">
+              <span class="sidebar-box-title">Expediente en Memoria</span>
+              <span class="sidebar-box-badge">Activo</span>
+            </div>
+            
+            <div class="document-summary-card">
+              <div class="doc-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div class="doc-meta-info">
+                <span class="doc-title-text" id="doc-name-label">Estatuto Corporativo Base</span>
+                <span class="doc-stats-text" id="doc-words-stat">6 Artículos · 850 palabras</span>
+              </div>
+            </div>
+
+            <div class="sidebar-switch-buttons">
+              <button class="btn-subtle-switch" id="btn-quick-switch-lft">Ver Ley Laboral (LFT)</button>
+              <button class="btn-subtle-switch" id="btn-quick-switch-corp">Ver Estatuto Base</button>
+            </div>
+          </div>
+
+          <!-- Dropzone Lateral -->
+          <div class="sidebar-dropzone" id="upload-dropzone">
+            <input type="file" id="file-input" accept=".pdf,.docx,.doc,.txt,.md" style="display: none;">
+            <div class="dropzone-svg">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            </div>
+            <div class="dropzone-copy">
+              <b>Cargar Contrato o Demanda</b>
+              <span>PDF o Word (.docx) · Extrae texto a Markdown</span>
+            </div>
+          </div>
+
+          <!-- Fuentes Oficiales en Vivo -->
+          <div class="sidebar-box">
+            <div class="sidebar-box-header">
+              <span class="sidebar-box-title">Fuentes & Citas Oficiales</span>
+              <span class="sidebar-box-badge badge-blue">DOF Conectado</span>
+            </div>
+            <div class="sidebar-citations-feed" id="citations-list">
+              <p class="empty-citations-msg">Formula una consulta para auditar las citas legales y fuentes del Diario Oficial de la Federación obtenidas en tiempo real.</p>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 2: MATRIZ DE RIESGO CONTRACTUAL (RISK MATRIX)
+         ==================================================================== -->
+    <section class="panel-section" id="tab-panel-riesgos">
+      <div class="risk-matrix-wrapper">
+        
+        <div class="section-header-row">
+          <div>
+            <h2 class="section-heading">Matriz de Riesgo & Cumplimiento Normativo</h2>
+            <p class="section-subheading">Auditoría pericial de responsabilidades, penalizaciones, vigencias y contingencias legales.</p>
+          </div>
+          <div class="section-actions-group">
+            <button class="btn-ghost-action" id="btn-recalculate-risk">Re-auditar Cláusulas</button>
+            <button class="btn-solid-action" id="btn-export-risk-report">Exportar Informe Ejecutivo</button>
+          </div>
+        </div>
+
+        <!-- Indicadores Clave (KPIs) -->
+        <div class="kpi-cards-grid">
+          
+          <div class="kpi-panel-card kpi-main-risk">
+            <div class="kpi-panel-head">
+              <span class="kpi-panel-title">Nivel de Riesgo Global</span>
+              <span class="status-tag tag-warning" id="global-risk-badge">Moderado</span>
+            </div>
+            <div class="kpi-score-row">
+              <span class="kpi-score-figure" id="global-risk-score">62</span>
+              <span class="kpi-score-denom">/ 100</span>
+            </div>
+            <div class="kpi-bar-track">
+              <div class="kpi-bar-fill fill-warning" id="global-risk-bar" style="width: 62%;"></div>
+            </div>
+            <p class="kpi-panel-desc" id="global-risk-summary">Contrato mercantil equilibrado con penalización por cancelación anticipada tasada en 15% y preaviso de 30 días.</p>
+          </div>
+
+          <div class="kpi-panel-card">
+            <div class="kpi-panel-head">
+              <span class="kpi-panel-title">Penalización Rescisión</span>
+              <span class="status-tag tag-neutral">Cláusula 2</span>
+            </div>
+            <div class="kpi-metric-text" id="kpi-penalizacion-val">15% del Monto</div>
+            <p class="kpi-panel-desc">Requiere preaviso fehaciente por escrito de 30 días naturales previos a la resolución.</p>
+          </div>
+
+          <div class="kpi-panel-card">
+            <div class="kpi-panel-head">
+              <span class="kpi-panel-title">Secreto Industrial</span>
+              <span class="status-tag tag-success">Protegido</span>
+            </div>
+            <div class="kpi-metric-text" id="kpi-confidencialidad-val">5 Años Vigencia</div>
+            <p class="kpi-panel-desc">Indemnización mínima prefijada de $50,000 USD por divulgación dolosa o negligente.</p>
+          </div>
+
+          <div class="kpi-panel-card">
+            <div class="kpi-panel-head">
+              <span class="kpi-panel-title">Protección de Datos (ARCO)</span>
+              <span class="status-tag tag-success">Conforme</span>
+            </div>
+            <div class="kpi-metric-text" id="kpi-arco-val">20 Días Hábiles</div>
+            <p class="kpi-panel-desc">Canal institucional de respuesta: datos@iurislegal.com, conforme a la LFPDPPP.</p>
+          </div>
+
+        </div>
+
+        <!-- Tarjetas de Cláusulas (Responsive: Mobile Cards / Desktop Table) -->
+        <div class="clauses-audit-container">
+          <div class="clauses-container-header">
+            <h3 class="container-header-title">Desglose Detallado de Cláusulas Auditadas</h3>
+            <span class="container-doc-badge" id="risk-matrix-doc-name">Estatuto Corporativo Base</span>
+          </div>
+
+          <!-- Grid Responsivo de Cláusulas -->
+          <div class="clauses-cards-stack" id="risk-clauses-stack">
+            
+            <div class="clause-item-card">
+              <div class="clause-card-top">
+                <div class="clause-title-block">
+                  <span class="clause-number-tag">ARTÍCULO 2</span>
+                  <span class="clause-name-text">Rescisión Contractual & Cancelación</span>
+                </div>
+                <span class="status-tag tag-warning">Alerta Media</span>
+              </div>
+              <div class="clause-meta-row">
+                <span><b>Tipo:</b> Prestación de Servicios</span> · 
+                <span><b>Plazo:</b> 30 días naturales</span> · 
+                <span><b>Penalización:</b> 15% del total</span>
+              </div>
+              <p class="clause-technical-opinion">Penalización mercantil comercial estándar. No se advierten vicios de leoninidad ni renuncia de derechos irrenunciables.</p>
+              <div class="clause-action-note">
+                <b>Recomendación Táctica:</b> Conservar constancia fehaciente con acuse de recibo de la notificación previa.
+              </div>
+            </div>
+
+            <div class="clause-item-card">
+              <div class="clause-card-top">
+                <div class="clause-title-block">
+                  <span class="clause-number-tag">ARTÍCULO 3</span>
+                  <span class="clause-name-text">Secretos Industriales & Confidencialidad</span>
+                </div>
+                <span class="status-tag tag-success">Conforme</span>
+              </div>
+              <div class="clause-meta-row">
+                <span><b>Tipo:</b> Convenio NDA</span> · 
+                <span><b>Vigencia:</b> 5 años posteriores</span> · 
+                <span><b>Indemnización:</b> $50,000 USD</span>
+              </div>
+              <p class="clause-technical-opinion">Cláusula sólida y alineada con la Ley Federal de Protección a la Propiedad Industrial. Define claramente el alcance de la información sensible.</p>
+              <div class="clause-action-note">
+                <b>Recomendación Táctica:</b> Registrar bitácora de entrega de claves y repositorios privados de software.
+              </div>
+            </div>
+
+            <div class="clause-item-card">
+              <div class="clause-card-top">
+                <div class="clause-title-block">
+                  <span class="clause-number-tag">ARTÍCULO 4</span>
+                  <span class="clause-name-text">Cesión de Propiedad Intelectual</span>
+                </div>
+                <span class="status-tag tag-success">Conforme</span>
+              </div>
+              <div class="clause-meta-row">
+                <span><b>Tipo:</b> Obra por Encargo</span> · 
+                <span><b>Alcance:</b> Perpetuo y exclusivo a nivel global</span>
+              </div>
+              <p class="clause-technical-opinion">Cesión patrimonial íntegra en favor del contratante sin devengo de regalías o licencias futuras sobre el código fuente entregado.</p>
+              <div class="clause-action-note">
+                <b>Recomendación Táctica:</b> Incluir actas de entrega-recepción suscritas por ambas partes técnicas.
+              </div>
+            </div>
+
+            <div class="clause-item-card">
+              <div class="clause-card-top">
+                <div class="clause-title-block">
+                  <span class="clause-number-tag">ARTÍCULO 6</span>
+                  <span class="clause-name-text">Jurisdicción & Solución de Controversias</span>
+                </div>
+                <span class="status-tag tag-success">Conforme</span>
+              </div>
+              <div class="clause-meta-row">
+                <span><b>Tipo:</b> Cláusula de Fuero</span> · 
+                <span><b>Etapa Previa:</b> 15 días de conciliación directa</span> · 
+                <span><b>Tribunales:</b> Ciudad de México</span>
+              </div>
+              <p class="clause-technical-opinion">Renuncia expresa a fueros por domicilio presente o futuro. Establece periodo prudencial de arreglo amistoso previo a demanda judicial.</p>
+              <div class="clause-action-note">
+                <b>Recomendación Táctica:</b> Formalizar notificaciones en los domicilios contractuales declarados.
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 3: CALCULADORA LABORAL (LEY FEDERAL DEL TRABAJO)
+         ==================================================================== -->
+    <section class="panel-section" id="tab-panel-laboral">
+      <div class="lft-panel-wrapper">
+        
+        <div class="section-header-row">
+          <div>
+            <h2 class="section-heading">Calculadora Laboral & Legislación Oficial (LFT)</h2>
+            <p class="section-subheading">Simulador de prestaciones conforme al decreto de Vacaciones Dignas (Art. 76) y normativa laboral aplicable.</p>
+          </div>
+          <span class="reform-tag-live">Decreto DOF Vigente</span>
+        </div>
+
+        <div class="lft-columns-layout">
+          
+          <!-- Calculadora Interactiva Touch-Friendly -->
+          <div class="calculator-card">
+            <h3 class="card-inner-title">Simulador Pericial de Prestaciones</h3>
+            
+            <div class="form-input-block">
+              <label for="lft-antiguedad-select" class="form-label">Antigüedad del Trabajador en la Empresa:</label>
+              <div class="select-wrapper">
+                <select id="lft-antiguedad-select" class="form-select-field">
+                  <option value="1">Año 1 de servicio (12 días)</option>
+                  <option value="2" selected>Año 2 de servicio (14 días)</option>
+                  <option value="3">Año 3 de servicio (16 días)</option>
+                  <option value="4">Año 4 de servicio (18 días)</option>
+                  <option value="5">Año 5 de servicio (20 días)</option>
+                  <option value="6">Años 6 a 10 de servicio (22 días)</option>
+                  <option value="11">Años 11 a 15 de servicio (24 días)</option>
+                  <option value="16">Años 16 a 20 de servicio (26 días)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-input-block">
+              <label for="lft-salario-input" class="form-label">Salario Mensual Bruto (MXN):</label>
+              <input type="number" id="lft-salario-input" class="form-text-field" value="25000" min="7500" step="500">
+            </div>
+
+            <!-- Desglose de Resultados -->
+            <div class="calculator-results-box">
+              
+              <div class="result-data-row">
+                <span class="result-title">Vacaciones Oficiales (Art. 76 LFT)</span>
+                <span class="result-primary-number highlight-emerald" id="calc-dias-vacaciones">14 días laborables</span>
+                <span class="result-footnote" id="calc-vacaciones-pago">$11,666.67 MXN salario ordinario</span>
+              </div>
+
+              <div class="result-data-row">
+                <span class="result-title">Prima Vacacional Legal (Art. 80 LFT - 25% mín.)</span>
+                <span class="result-primary-number" id="calc-prima-vacacional">$2,916.67 MXN</span>
+                <span class="result-footnote">25% sobre el salario devengado durante vacaciones</span>
+              </div>
+
+              <div class="result-data-row">
+                <span class="result-title">Aguinaldo Mínimo Legal (Art. 87 LFT - 15 días)</span>
+                <span class="result-primary-number" id="calc-aguinaldo">$12,500.00 MXN</span>
+                <span class="result-footnote">15 días de salario con pago previo al 20 de diciembre</span>
+              </div>
+
+              <div class="result-data-row">
+                <span class="result-title">Liquidación Constitucional (Despido Injustificado)</span>
+                <span class="result-primary-number highlight-amber" id="calc-indemnizacion">$91,666.67 MXN</span>
+                <span class="result-footnote">3 meses de salario + 20 días por año de servicio (Art. 48/50 LFT)</span>
+              </div>
+
+            </div>
+
+            <button class="btn-solid-action btn-full-width" id="btn-lft-generar-dictamen">
+              Emitir Dictamen Laboral Formal
+            </button>
+          </div>
+
+          <!-- Articulado Oficial de la LFT -->
+          <div class="legal-statutes-card">
+            <h3 class="card-inner-title">Articulado Relevante de la Ley Federal del Trabajo</h3>
+
+            <div class="statutes-stack">
+              
+              <article class="statute-box">
+                <div class="statute-box-head">
+                  <span class="statute-num-badge">ARTÍCULO 76 LFT</span>
+                  <span class="statute-name">Vacaciones Dignas (Decreto Oficial)</span>
+                </div>
+                <p class="statute-text">
+                  Las personas trabajadoras que tengan más de un año de servicios disfrutarán de un período anual de vacaciones pagadas, que en ningún caso podrá ser inferior a <b>doce días laborables</b>, y que aumentará en <b>dos días laborables</b>, hasta llegar a veinte, por cada año subsecuente de servicios. A partir del sexto año, el período aumentará en dos días por cada cinco de servicios.
+                </p>
+                <div class="statute-pills-row">
+                  <span>Año 1: 12d</span>
+                  <span>Año 2: 14d</span>
+                  <span>Año 3: 16d</span>
+                  <span>Año 4: 18d</span>
+                  <span>Año 5: 20d</span>
+                </div>
+              </article>
+
+              <article class="statute-box">
+                <div class="statute-box-head">
+                  <span class="statute-num-badge">ARTÍCULO 87 LFT</span>
+                  <span class="statute-name">Aguinaldo Anual Obligatorio</span>
+                </div>
+                <p class="statute-text">
+                  Los trabajadores tendrán derecho a un aguinaldo anual que deberá pagarse antes del día <b>veinte de diciembre</b>, equivalente a <b>quince días de salario</b>, por lo menos. Quienes no hayan cumplido el año de servicios tendrán derecho a que se les pague la parte proporcional conforme al tiempo laborado.
+                </p>
+              </article>
+
+              <article class="statute-box">
+                <div class="statute-box-head">
+                  <span class="statute-num-badge">ARTÍCULO 47 LFT</span>
+                  <span class="statute-name">Rescisión sin Responsabilidad Patronal</span>
+                </div>
+                <p class="statute-text">
+                  Son causas de rescisión de la relación de trabajo, sin responsabilidad para el patrón: engañar al patrón con certificados falsos, incurrir en faltas de probidad u honradez, actos de violencia o injurias, ocasionar daños materiales intencionales en las instalaciones, o tener más de tres faltas de asistencia en un período de treinta días sin permiso o causa justificada.
+                </p>
+              </article>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 4: EXPEDIENTE DIGITAL & MARKDOWN
+         ==================================================================== -->
+    <section class="panel-section" id="tab-panel-expediente">
+      <div class="dossier-wrapper">
+        
+        <!-- Sidebar de Cláusulas (Desktop) -->
+        <aside class="dossier-index-side">
+          <div class="dossier-side-header">
+            <span class="dossier-side-title">Índice Contractual</span>
+            <span class="dossier-side-count" id="dossier-sections-count">6 Artículos</span>
+          </div>
+
+          <div class="dossier-nav-list" id="dossier-index-list">
+            <button class="dossier-nav-btn active" data-clause="art-1">Artículo 1: Privacidad y ARCO</button>
+            <button class="dossier-nav-btn" data-clause="art-2">Artículo 2: Rescisión Contractual</button>
+            <button class="dossier-nav-btn" data-clause="art-3">Artículo 3: Secretos Industriales</button>
+            <button class="dossier-nav-btn" data-clause="art-4">Artículo 4: Propiedad Intelectual</button>
+            <button class="dossier-nav-btn" data-clause="art-5">Artículo 5: Conducta Anticorrupción</button>
+            <button class="dossier-nav-btn" data-clause="art-6">Artículo 6: Solución de Controversias</button>
+          </div>
+
+          <div class="dossier-actions-bottom">
+            <button class="btn-ghost-action btn-full-width" id="btn-copy-dossier-md">Copiar Markdown</button>
+            <button class="btn-ghost-action btn-full-width" id="btn-download-dossier-md">Descargar .md</button>
+          </div>
+        </aside>
+
+        <!-- Visor del Texto Estructurado -->
+        <div class="dossier-content-column">
+          <div class="dossier-content-header">
+            <div class="dossier-doc-details">
+              <span class="dossier-name-strong" id="dossier-doc-name">Estatuto_Corporativo.md</span>
+              <span class="dossier-badge-pill" id="dossier-format-tag">Markdown Estructurado</span>
+            </div>
+            <span class="dossier-words-stat" id="dossier-word-count">850 palabras</span>
+          </div>
+
+          <div class="dossier-view-scroll">
+            <pre class="dossier-code-pre" id="markdown-viewer"><code>Cargando expediente digital...</code></pre>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- ======================================================================
        MODAL DE CONFIGURACIÓN DE API KEY (MINIMALISTA)
        ====================================================================== -->
-  <dialog id="modal-key-config" class="legal-dialog">
-    <div class="dialog-card">
-      <div class="dialog-head">
-        <h3 class="dialog-title">Configuración de Gemini 3.8 Flash</h3>
-        <button class="dialog-close" id="btn-close-key-modal">&times;</button>
+  <dialog id="modal-key-config" class="app-modal">
+    <div class="modal-card">
+      <div class="modal-card-head">
+        <h3 class="modal-title">Configuración de Gemini 3.8 Flash</h3>
+        <button class="modal-btn-close" id="btn-close-key-modal">&times;</button>
       </div>
-      <div class="dialog-body">
-        <p class="dialog-desc">Introduce tu API Key de Google AI Studio para activar inferencia en la nube. En despliegues en Vercel, se recomienda configurar como variable de entorno <code>GEMINI_API_KEY</code>.</p>
+      <div class="modal-card-body">
+        <p class="modal-desc">Introduce tu API Key de Google AI Studio para activar inferencia en la nube. En despliegues de Vercel, se inyecta de forma segura mediante la variable de entorno <code>GEMINI_API_KEY</code>.</p>
         
-        <div class="input-field-group">
-          <label for="input-gemini-key">Gemini API Key:</label>
-          <input type="password" id="input-gemini-key" class="legal-text-input" placeholder="AIzaSy...">
+        <div class="form-input-block">
+          <label for="input-gemini-key" class="form-label">Gemini API Key:</label>
+          <input type="password" id="input-gemini-key" class="form-text-field" placeholder="AIzaSy...">
         </div>
 
-        <div class="dialog-footer">
-          <button class="btn-dialog-secondary" id="btn-reset-key">Usar Local / Simulación</button>
-          <button class="btn-dialog-primary" id="btn-save-key">Guardar Clave</button>
+        <div class="modal-footer-row">
+          <button class="btn-ghost-action" id="btn-reset-key">Modo Local / Simulado</button>
+          <button class="btn-solid-action" id="btn-save-key">Guardar Clave</button>
         </div>
       </div>
     </div>
   </dialog>
 
-  <!-- INPUT OCULTO DE SUBIDA DE ARCHIVO -->
+  <!-- Input oculto para subida global de archivos -->
   <input type="file" id="global-file-input" accept=".pdf,.docx,.doc,.txt,.md" style="display: none;">
 
+  <!-- Script Cliente -->
   <script src="app.js"></script>
 </body>
 </html>
