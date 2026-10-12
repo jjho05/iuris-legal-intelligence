@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Iuris Legal Intelligence — Análisis Jurídico, Contratos y Legislación Vigente</title>
+  <meta name="description" content="Plataforma profesional de análisis legal, dictamen de contratos y consulta de leyes vigentes con Gemini 3.8 Flash y grounding web.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ======================================================================
+       HEADER INSTITUCIONAL Y SOBRIO
+       ====================================================================== -->
+  <header class="legal-header">
+    <div class="header-inner">
+      <div class="brand-block">
+        <div class="brand-crest">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v18"/>
+            <rect x="3" y="7" width="18" height="13" rx="2"/>
+            <path d="M6 7l6-4 6 4"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">Iuris <span class="brand-edition">Legal Intelligence</span></h1>
+          <p class="brand-tagline">Análisis de Contratos & Legislación Federal</p>
+        </div>
+      </div>
+
+      <!-- Selector de Marco Legal en Header (Desktop) -->
+      <div class="corpus-switcher-wrap">
+        <label for="select-legal-framework" class="sr-only">Marco Legal</label>
+        <div class="framework-select-custom">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <select id="select-legal-framework">
+            <option value="corporativo">Estatuto Corporativo & Cumplimiento</option>
+            <option value="lft">Ley Federal del Trabajo (LFT / Laboral)</option>
+            <option value="custom" disabled id="opt-custom-doc">Documento Cargado (Sin archivo)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Acciones de Cabecera -->
+      <div class="header-controls">
+        <!-- Toggle Búsqueda Web de Leyes -->
+        <label class="web-search-toggle" title="Habilita búsqueda en internet de reformas, jurisprudencia y leyes vigentes">
+          <input type="checkbox" id="toggle-web-search" checked>
+          <span class="toggle-track"></span>
+          <span class="toggle-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span>Búsqueda Web</span>
+          </span>
+        </label>
+
+        <!-- Botón Subir Archivo -->
+        <button class="btn-legal-action" id="btn-trigger-upload" title="Subir contrato o ley (PDF o Word)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span class="btn-text">Subir Documento</span>
+        </button>
+
+        <!-- Botón Configurar API Key -->
+        <button class="btn-icon-subtle" id="btn-open-key-modal" title="Configurar API Key de Gemini">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-2-2l2 2"/><path d="M15.5 8.5l-7.79 7.79a2.5 2.5 0 0 1-1.77.73H3.5v-2.44a2.5 2.5 0 0 1 .73-1.77L12 5.02"/><circle cx="16.5" cy="7.5" r="3.5"/></svg>
+        </button>
+
+        <!-- Botón Móvil para Abrir Panel Documental -->
+        <button class="btn-icon-subtle mobile-only" id="btn-toggle-drawer" title="Ver Expediente / Cláusulas">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       ÁREA PRINCIPAL DE TRABAJO
+       ====================================================================== -->
+  <main class="legal-workspace">
+    <div class="workspace-layout">
+
+      <!-- COLUMNA PRINCIPAL: CHAT JURÍDICO & CONSULTAS -->
+      <section class="main-chat-view">
+        
+        <!-- BARRA DE CONTEXTO ACTIVO -->
+        <div class="context-indicator-bar">
+          <div class="context-pill">
+            <span class="pill-dot"></span>
+            <span class="pill-text" id="active-context-label">Marco: Estatuto Corporativo & Cumplimiento</span>
+          </div>
+          <div class="model-tag-subtle">
+            <span>Gemini 3.8 Flash</span>
+          </div>
+        </div>
+
+        <!-- LISTA DE MENSAJES -->
+        <div class="chat-thread" id="chat-thread">
+          <div class="thread-message assistant-row">
+            <div class="message-meta-line">
+              <span class="meta-author">Iuris Legal Intelligence</span>
+              <span class="meta-time">Asesor Jurídico</span>
+            </div>
+            <div class="message-content">
+              <p>Bienvenido a <b>Iuris Legal Intelligence</b>. Esta plataforma está configurada para el análisis riguroso de normativas corporativas, contratos mercantiles y la <b>Ley Federal del Trabajo (LFT)</b>.</p>
+              <p style="margin-top: 0.6rem;">Puedes formular consultas legales fácticas, contrastar cláusulas con leyes vigentes en internet, o <b>subir un contrato en PDF o Word</b> para convertirlo a Markdown y auditar penalizaciones, riesgos y obligaciones.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHIPS SUGERIDOS SOBRIOS -->
+        <div class="suggested-queries-bar" id="suggested-queries">
+          <button class="query-chip" data-query="¿Cuáles son los días de vacaciones según la reforma de vacaciones dignas de la LFT?">
+            Vacaciones Dignas (Art. 76 LFT)
+          </button>
+          <button class="query-chip" data-query="¿Cuál es el plazo de aviso y penalización económica por rescisión contractual?">
+            Rescisión & 15% Penalidad
+          </button>
+          <button class="query-chip" data-query="¿Qué vigencia tiene la confidencialidad de un secreto industrial y cuál es la indemnización?">
+            Confidencialidad NDA (5 años)
+          </button>
+          <button class="query-chip" data-query="¿A qué correo solicito mis derechos ARCO y cuál es el plazo legal de dictamen?">
+            Derechos ARCO (20 días hábiles)
+          </button>
+        </div>
+
+        <!-- INPUT BAR RESPONSIVA -->
+        <div class="chat-composer-wrap">
+          <form id="chat-composer-form" class="composer-form">
+            <textarea 
+              id="composer-input" 
+              class="composer-textarea" 
+              rows="1" 
+              placeholder="Formula una consulta jurídica o solicita el análisis de una cláusula..."
+              required
+            ></textarea>
+            <div class="composer-controls">
+              <!-- Botón Adjuntar Archivo en barra de texto -->
+              <button type="button" class="composer-btn-attach" id="btn-attach-file" title="Adjuntar PDF o Word">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+              </button>
+              <button type="submit" class="composer-btn-submit" id="btn-composer-submit" title="Enviar consulta">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </div>
+          </form>
+          <div class="composer-disclaimer">
+            <span>Las opiniones emitidas se sustentan en el articulado activo y fuentes oficiales del Estado. No sustituyen el patrocinio judicial letrado.</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- COLUMNA LATERAL: GESTOR DOCUMENTAL, CONVERTIDOR MD Y CITAS -->
+      <aside class="sidebar-document-view" id="document-sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-tabs">
+            <button class="sidebar-tab active" id="tab-btn-document">Expediente & Markdown</button>
+            <button class="sidebar-tab" id="tab-btn-citations">Citas & Fuentes</button>
+          </div>
+          <button class="sidebar-close-btn mobile-only" id="btn-close-sidebar">&times;</button>
+        </div>
+
+        <!-- PANEL 1: DOCUMENTO ACTIVO Y CONVERTIDOR MARKDOWN -->
+        <div class="sidebar-panel active" id="panel-document">
+          
+          <!-- ZONA DROPZONE PARA SUBIR ARCHIVOS -->
+          <div class="upload-dropzone" id="upload-dropzone">
+            <input type="file" id="file-input" accept=".pdf,.docx,.doc,.txt,.md" style="display: none;">
+            <div class="dropzone-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            </div>
+            <div class="dropzone-text">
+              <b>Cargar Contrato o Archivo Legal</b>
+              <span>PDF o Word (.docx) · Conversión automática a Markdown</span>
+            </div>
+          </div>
+
+          <!-- FICHA DEL DOCUMENTO CARGADO -->
+          <div class="document-metadata-card" id="doc-meta-card" style="display: none;">
+            <div class="meta-card-header">
+              <span class="meta-doc-name" id="doc-name-label">contrato.docx</span>
+              <span class="meta-doc-badge" id="doc-type-badge">Word DOCX</span>
+            </div>
+            <div class="meta-stats-row">
+              <span id="doc-words-stat">0 palabras</span> · 
+              <span id="doc-sections-stat">0 cláusulas detectadas</span>
+            </div>
+            <div class="meta-actions-row">
+              <button class="btn-text-action" id="btn-copy-md">Copiar Markdown</button>
+              <button class="btn-text-action" id="btn-download-md">Descargar .md</button>
+            </div>
+          </div>
+
+          <!-- VISOR DE TEXTO / MARKDOWN -->
+          <div class="document-content-viewer">
+            <div class="viewer-header">
+              <span>Estructura Jurídica Indexada</span>
+            </div>
+            <pre class="markdown-preview" id="markdown-viewer"><code>Selecciona un marco legal o sube un documento PDF/Word para auditar sus cláusulas en formato Markdown estructurado.</code></pre>
+          </div>
+
+        </div>
+
+        <!-- PANEL 2: CITAS Y FUENTES WEB EN VIVO -->
+        <div class="sidebar-panel" id="panel-citations">
+          <div class="citations-container">
+            <div class="citations-header">
+              <span>Fuentes Normativas & Enlaces Oficiales</span>
+            </div>
+            <div class="citations-list" id="citations-list">
+              <p class="empty-citations-hint">Formula una consulta para auditar las citas textuales de leyes federales o fragmentos de contratos recuperados.</p>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- ======================================================================
+       MODAL DE CONFIGURACIÓN DE API KEY (MINIMALISTA)
+       ====================================================================== -->
+  <dialog id="modal-key-config" class="legal-dialog">
+    <div class="dialog-card">
+      <div class="dialog-head">
+        <h3 class="dialog-title">Configuración de Gemini 3.8 Flash</h3>
+        <button class="dialog-close" id="btn-close-key-modal">&times;</button>
+      </div>
+      <div class="dialog-body">
+        <p class="dialog-desc">Introduce tu API Key de Google AI Studio para activar inferencia en la nube. En despliegues en Vercel, se recomienda configurar como variable de entorno <code>GEMINI_API_KEY</code>.</p>
+        
+        <div class="input-field-group">
+          <label for="input-gemini-key">Gemini API Key:</label>
+          <input type="password" id="input-gemini-key" class="legal-text-input" placeholder="AIzaSy...">
+        </div>
+
+        <div class="dialog-footer">
+          <button class="btn-dialog-secondary" id="btn-reset-key">Usar Local / Simulación</button>
+          <button class="btn-dialog-primary" id="btn-save-key">Guardar Clave</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- INPUT OCULTO DE SUBIDA DE ARCHIVO -->
+  <input type="file" id="global-file-input" accept=".pdf,.docx,.doc,.txt,.md" style="display: none;">
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+ESTATUTO CORPORATIVO Y MANUAL DE CUMPLIMIENTO LEGAL DE IURIS GLOBAL CORP
+Versión 2.4 — Aprobado por la Dirección General y el Comité de Cumplimiento Normativo
+
+Artículo 1: Política de Privacidad, Protección de Datos y Ejercicio de Derechos ARCO
+Los titulares de datos personales pueden ejercer sus derechos de Acceso, Rectificación, Cancelación y Oposición (ARCO) mediante solicitud formal enviada al correo datos@iurislegal.com. La Dirección Jurídica evaluará la solicitud y emitirá una resolución vinculante en un plazo máximo e improrrogable de 20 días hábiles posteriores a la recepción completa del expediente. Los datos sensibles recopilados jamás serán comercializados a terceros bajo ninguna circunstancia.
+
+Artículo 2: Condiciones de Rescisión Contractual y Notificación Previa
+Cualquiera de las partes podrá rescindir el presente instrumento contractual mediante notificación fehaciente por escrito entregada con al menos 30 días naturales de anticipación. En caso de rescisión justificada por negligencia grave, abandono de obligaciones o incumplimiento injustificado de entregables, aplicará una penalización inmediata equivalente al 15% del valor total convenido en el contrato, sin perjuicio de las indemnizaciones por daños comprobables.
+
+Artículo 3: Protección de Secretos Industriales y Régimen de Confidencialidad
+Toda información técnica, financiera, algoritmos y documentación comercial compartida entre las partes se considera Secreto Industrial estrictamente protegido. La obligación de confidencialidad mantendrá plena vigencia durante la relación contractual y continuará en vigor por un período de 5 años posteriores a la extinción del contrato. Cualquier divulgación no autorizada facultará a Iuris Global Corp a exigir una indemnización inmediata por daños tasada en un mínimo de 50,000 USD, independientemente de la persecución penal aplicable.
+
+Artículo 4: Propiedad Intelectual y Titularidad de Desarrollos Tecnológicos
+Todos los códigos fuente, modelos de inteligencia artificial, arquitecturas de software, metodologías, marcas y patentes desarrollados en el marco de la prestación de servicios pertenecerán de manera exclusiva y perpetua a Iuris Global Corp. El proveedor o contratista transfiere la totalidad de los derechos patrimoniales y renuncia a cualquier reclamo posterior de regalías. Queda terminantemente prohibida cualquier labor de descompilación, ingeniería inversa o reutilización no autorizada.
+
+Artículo 5: Código de Conducta Anticorrupción y Límites de Dádivas
+Iuris Global Corp mantiene una política estricta de tolerancia cero ante cualquier conducta de soborno, tráfico de influencias, extorsión o dádivas comerciales. Queda expresamente prohibido que cualquier empleado o representante legal ofrezca o reciba obsequios, comidas o atenciones de clientes, socios o funcionarios públicos cuyo valor comercial supere los 50 USD. Toda sospecha de irregularidad debe ser denunciada anónimamente a compliance@iurislegal.com.
+
+Artículo 6: Procedimiento de Escalación y Resolución Pacífica de Controversias
+Ante cualquier controversia técnica o jurídica derivada de la interpretación o ejecución de los acuerdos, las partes se obligan a iniciar una etapa previa de conciliación de buena fe que no excederá de 15 días hábiles. Agotada dicha instancia sin acuerdo vinculante, las partes se someterán expresamente a la jurisdicción de los tribunales competentes de la Ciudad de México, renunciando a cualquier otro fuero que pudiera corresponderles por razón de sus domicilios presentes o futuros.

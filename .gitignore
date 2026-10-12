@@ -1,0 +1,21 @@
+# Entornos virtuales
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Secretos y credenciales
+.env
+
+# Cache de pruebas y herramientas
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDEs y SO
+.DS_Store
+.idea/
+.vscode/
+*.zip
