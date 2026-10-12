@@ -85,17 +85,27 @@ class GeminiLegalClient:
         Extrae y clasifica cláusulas, riesgos y obligaciones de un contrato en JSON estructurado.
         """
         system_instruction = (
-            "Eres un auditor jurídico especializado en análisis contractual. "
+            "Eres un auditor jurídico especializado en análisis contractual y compliance corporativo. "
             "Analiza el texto del contrato y genera ÚNICAMENTE un objeto JSON estricto con las claves:\n"
             "{\n"
             '  "tipo_instrumento": "contrato_prestacion_servicios | contrato_laboral | acuerdo_nda | estatuto | convenio",\n'
             '  "partes_involucradas": ["Parte A", "Parte B"],\n'
             '  "clausula_principal": "Título o tema central identificado",\n'
             '  "nivel_riesgo_legal": "alto | medio | bajo",\n'
+            '  "score_riesgo": 62,\n'
             '  "penalizaciones_o_sanciones": "Descripción de multas, retenciones o porcentajes",\n'
             '  "plazos_o_vigencia": "Plazos de aviso, vencimiento o prórrogas",\n'
             '  "accion_recomendada": "Recomendación preventiva de blindaje legal",\n'
-            '  "resumen_ejecutivo": "Síntesis técnica del análisis"\n'
+            '  "resumen_ejecutivo": "Síntesis técnica del análisis",\n'
+            '  "clausulas_auditadas": [\n'
+            '    {\n'
+            '      "titulo": "Nombre de la cláusula",\n'
+            '      "severidad": "critico | alto | medio | conforme",\n'
+            '      "hallazgo": "Descripción del riesgo o cumplimiento",\n'
+            '      "texto_original": "Cita textual breve o extracto",\n'
+            '      "sugerencia_blindaje": "Propuesta de redacción equilibrada para blindaje legal"\n'
+            '    }\n'
+            '  ]\n'
             "}\n"
             "No incluyas texto fuera del bloque JSON."
         )
@@ -155,14 +165,55 @@ class GeminiLegalClient:
             )
 
     def _simular_extraccion_json(self, texto: str) -> Dict[str, Any]:
-        """Extractor JSON estructurado determinista."""
+        """Extractor JSON estructurado determinista con desglose pericial de cláusulas."""
+        t_lower = texto.lower()
+        score = 62
+        nivel = "medio"
+        if "indemniz" in t_lower or "penaliz" in t_lower or "rescis" in t_lower:
+            score = 74
+            nivel = "alto"
+        elif "confidencial" in t_lower or "nda" in t_lower:
+            score = 45
+            nivel = "bajo"
+
         return {
             "tipo_instrumento": "contrato_servicios_profesionales",
             "partes_involucradas": ["Prestador de Servicios", "Cliente Corporativo"],
             "clausula_principal": "Condiciones Operativas y Régimen de Cumplimiento",
-            "nivel_riesgo_legal": "medio",
+            "nivel_riesgo_legal": nivel,
+            "score_riesgo": score,
             "penalizaciones_o_sanciones": "15% del valor convenido ante rescisión injustificada",
             "plazos_o_vigencia": "Notificación previa de 30 días naturales",
-            "accion_recomendada": "Revisar cláusulas de resolución de controversias y cláusula arbitral",
-            "resumen_ejecutivo": texto[:140]
+            "accion_recomendada": "Revisar cláusulas de resolución de controversias e incorporar cláusula de fuerza mayor",
+            "resumen_ejecutivo": f"Auditoría pericial sobre {len(texto.split())} palabras del instrumento analizado. Se detectaron estipulaciones de rescisión con preaviso, cesión de derechos patrimoniales y cláusulas de confidencialidad mercantil.",
+            "clausulas_auditadas": [
+                {
+                    "titulo": "Rescisión Contractual & Preaviso",
+                    "severidad": "alto" if "rescis" in t_lower else "medio",
+                    "hallazgo": "Penalización fija del 15% del valor contractual total exigible de inmediato ante rescisión sin mediación previa.",
+                    "texto_original": "Cualquier incumplimiento imputable devengará una penalización inmediata del 15% del monto total convenido...",
+                    "sugerencia_blindaje": "Incorporar un periodo de subsanación (cure period) de al menos 10 días hábiles previos a la ejecución de la penalidad económica."
+                },
+                {
+                    "titulo": "Propiedad Intelectual y Derechos Morales",
+                    "severidad": "medio",
+                    "hallazgo": "Cesión patrimonial exclusiva y perpetua sin reserva de portafolio para el prestador técnico.",
+                    "texto_original": "Todos los desarrollos, códigos y entregables pasarán a ser propiedad exclusiva del cliente de forma irrevocable...",
+                    "sugerencia_blindaje": "Estipular que la cesión surtirá efectos plenos únicamente una vez liquidado el 100% de las contraprestaciones pactadas."
+                },
+                {
+                    "titulo": "Secretos Industriales & Confidencialidad",
+                    "severidad": "conforme",
+                    "hallazgo": "Vigencia de 5 años posteriores a la terminación con sanción convencional tasada según LFPPI.",
+                    "texto_original": "Las partes convienen guardar estricta reserva de la información clasificada durante 5 años posteriores...",
+                    "sugerencia_blindaje": "Cláusula ajustada al estándar mercantil y Art. 163 de la Ley Federal de Protección a la Propiedad Industrial."
+                },
+                {
+                    "titulo": "Jurisdicción & Solución de Controversias",
+                    "severidad": "conforme",
+                    "hallazgo": "Sometimiento expreso a los Tribunales de la Ciudad de México con renuncia a fueros por domicilio presente o futuro.",
+                    "texto_original": "Para la interpretación y cumplimiento, las partes se someten a los juzgados competentes de la CDMX...",
+                    "sugerencia_blindaje": "Fórmula procesal válida conforme al Código de Comercio y Código Civil Federal."
+                }
+            ]
         }

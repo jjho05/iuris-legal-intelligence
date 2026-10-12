@@ -70,11 +70,19 @@ const dom = {
   // Calculadora LFT (Tab 3)
   lftAntiguedadSelect: document.getElementById('lft-antiguedad-select'),
   lftSalarioInput: document.getElementById('lft-salario-input'),
+  lftCausalSelect: document.getElementById('lft-causal-select'),
   calcDiasVacaciones: document.getElementById('calc-dias-vacaciones'),
   calcVacacionesPago: document.getElementById('calc-vacaciones-pago'),
   calcPrimaVacacional: document.getElementById('calc-prima-vacacional'),
   calcAguinaldo: document.getElementById('calc-aguinaldo'),
+  calcSdi: document.getElementById('calc-sdi'),
+  calcFactorIntegracion: document.getElementById('calc-factor-integracion'),
+  rowIndemnizacion: document.getElementById('row-indemnizacion'),
+  labelIndemnizacion: document.getElementById('label-indemnizacion'),
   calcIndemnizacion: document.getElementById('calc-indemnizacion'),
+  calcIndemnizacionFootnote: document.getElementById('calc-indemnizacion-footnote'),
+  calcMontoTotal: document.getElementById('calc-monto-total'),
+  calcTotalFootnote: document.getElementById('calc-total-footnote'),
   btnLftGenerarDictamen: document.getElementById('btn-lft-generar-dictamen'),
 
   // Matriz de Riesgo (Tab 2)
@@ -87,10 +95,11 @@ const dom = {
   dossierWordCount: document.getElementById('dossier-word-count'),
   dossierIndexList: document.getElementById('dossier-index-list'),
   markdownViewer: document.getElementById('markdown-viewer'),
+  dossierSearchInput: document.getElementById('dossier-search-input'),
   btnCopyDossierMd: document.getElementById('btn-copy-dossier-md'),
   btnDownloadDossierMd: document.getElementById('btn-download-dossier-md'),
 
-  // Modal API Key
+  // Modal API Key (si estuviese presente)
   modalKey: document.getElementById('modal-key-config'),
   btnCloseKeyModal: document.getElementById('btn-close-key-modal'),
   inputGeminiKey: document.getElementById('input-gemini-key'),
@@ -277,14 +286,19 @@ function setupEventListeners() {
   // Calculadora LFT interactiva
   if (dom.lftAntiguedadSelect) dom.lftAntiguedadSelect.addEventListener('change', updateLftCalculations);
   if (dom.lftSalarioInput) dom.lftSalarioInput.addEventListener('input', updateLftCalculations);
+  if (dom.lftCausalSelect) dom.lftCausalSelect.addEventListener('change', updateLftCalculations);
 
   if (dom.btnLftGenerarDictamen) {
     dom.btnLftGenerarDictamen.addEventListener('click', () => {
       const antiguedad = dom.lftAntiguedadSelect.options[dom.lftAntiguedadSelect.selectedIndex].text;
       const salario = dom.lftSalarioInput.value;
-      const dias = dom.calcDiasVacaciones.textContent;
+      const causal = dom.lftCausalSelect ? dom.lftCausalSelect.options[dom.lftCausalSelect.selectedIndex].text : 'Despido Injustificado';
+      const dias = dom.calcDiasVacaciones ? dom.calcDiasVacaciones.textContent : '12 días';
+      const sdi = dom.calcSdi ? dom.calcSdi.textContent : '';
+      const total = dom.calcMontoTotal ? dom.calcMontoTotal.textContent : '';
+
       switchWorkbenchTab('dictamen');
-      dom.composerInput.value = `Emite un dictamen formal sobre los derechos laborales adquiridos para un trabajador con antigüedad de ${antiguedad} y salario mensual de $${salario} MXN, considerando las Vacaciones Dignas (${dias}) y Aguinaldo conforme al Art. 76 y Art. 87 de la LFT.`;
+      dom.composerInput.value = `Emite un dictamen formal sobre los derechos y obligaciones laborales para un trabajador con antigüedad de ${antiguedad}, salario mensual de $${salario} MXN (${sdi}), bajo la causal de "${causal}". Desglosa Vacaciones Dignas (${dias}, Art. 76 LFT), Aguinaldo (Art. 87 LFT), e Indemnización Constitucional aplicable, estimando un monto total liquidatorio de ${total}.`;
       dom.composerForm.dispatchEvent(new Event('submit'));
     });
   }
@@ -449,6 +463,31 @@ function generateDossierIndex(text) {
       btn.addEventListener('click', () => {
         dom.dossierIndexList.querySelectorAll('.dossier-nav-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        const term = btn.textContent.trim();
+        if (dom.markdownViewer && term) {
+          const headings = dom.markdownViewer.querySelectorAll('h1, h2, h3, h4, strong, p');
+          for (const el of headings) {
+            if (el.textContent.includes(term.split(' ')[0]) && el.textContent.includes(term.split(' ')[1] || '')) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              el.style.backgroundColor = 'rgba(217, 119, 6, 0.25)';
+              setTimeout(() => { el.style.backgroundColor = ''; }, 2000);
+              break;
+            }
+          }
+        }
+      });
+    });
+  }
+
+  // Filtrado reactivo del índice del expediente
+  if (dom.dossierSearchInput) {
+    dom.dossierSearchInput.addEventListener('input', () => {
+      const q = dom.dossierSearchInput.value.toLowerCase().trim();
+      if (!dom.dossierIndexList) return;
+      const buttons = dom.dossierIndexList.querySelectorAll('.dossier-nav-btn');
+      buttons.forEach(btn => {
+        const text = btn.textContent.toLowerCase();
+        btn.style.display = (!q || text.includes(q)) ? 'block' : 'none';
       });
     });
   }
@@ -461,7 +500,8 @@ function updateLftCalculations() {
   if (!dom.lftAntiguedadSelect || !dom.lftSalarioInput) return;
   const anios = parseInt(dom.lftAntiguedadSelect.value, 10);
   const salario = parseFloat(dom.lftSalarioInput.value) || 25000;
-  const salarioDiario = salario / 30;
+  const causal = dom.lftCausalSelect ? dom.lftCausalSelect.value : 'despido_injustificado';
+  const sdo = salario / 30; // Salario Diario Ordinario
 
   // Escala oficial de Vacaciones Dignas (Art. 76 LFT)
   let dias = 12;
@@ -473,16 +513,82 @@ function updateLftCalculations() {
   else if (anios === 11) dias = 24; // 11 a 15 años
   else if (anios === 16) dias = 26; // 16 a 20 años
 
-  const pagoVacaciones = salarioDiario * dias;
-  const primaVacacional = pagoVacaciones * 0.25;
-  const aguinaldo = salarioDiario * 15;
-  const liquidacion = (salario * 3) + (salarioDiario * 20 * anios);
+  // Factor de Integración legal mínimo (Art. 84 y 89 LFT):
+  // 365 días base + 15 días aguinaldo (Art. 87) + (días vacaciones * 25% prima) (Art. 80)
+  const proporcionAguinaldo = 15 / 365;
+  const proporcionPrimaVac = (dias * 0.25) / 365;
+  const factorIntegracion = 1 + proporcionAguinaldo + proporcionPrimaVac;
+  const sdi = sdo * factorIntegracion;
 
+  // Prestaciones Devengadas (Finiquito Mínimo de Ley)
+  const pagoVacaciones = sdo * dias;
+  const primaVacacional = pagoVacaciones * 0.25;
+  const aguinaldo = sdo * 15;
+  const subtotalFiniquito = pagoVacaciones + primaVacacional + aguinaldo;
+
+  // Prima de Antigüedad (Art. 162 LFT): 12 días por año, topada a 2 salarios mínimos vigentes ($248.93 x 2 = $497.86)
+  const topeSalarioMinimo = 497.86;
+  const salarioBasePrimaAntiguedad = Math.min(sdo, topeSalarioMinimo);
+  const primaAntiguedadTotal = 12 * anios * salarioBasePrimaAntiguedad;
+
+  // Indemnización Constitucional / Liquidación según causal
+  let montoIndemnizacion = 0;
+  let montoTotal = 0;
+
+  if (causal === 'despido_injustificado') {
+    // Art. 48 & 50 LFT: 3 meses (90 días de SDI) + 20 días por año (SDI) + Prima de Antigüedad (Art. 162)
+    const indemnizacion90Dias = 90 * sdi;
+    const veinteDiasPorAnio = 20 * anios * sdi;
+    montoIndemnizacion = indemnizacion90Dias + veinteDiasPorAnio + primaAntiguedadTotal;
+    montoTotal = montoIndemnizacion + subtotalFiniquito;
+
+    if (dom.rowIndemnizacion) dom.rowIndemnizacion.style.display = 'flex';
+    if (dom.labelIndemnizacion) dom.labelIndemnizacion.textContent = 'Indemnización Constitucional + 20 Días + Prima Ant.';
+    if (dom.calcIndemnizacion) dom.calcIndemnizacion.textContent = `$${montoIndemnizacion.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN`;
+    if (dom.calcIndemnizacionFootnote) dom.calcIndemnizacionFootnote.textContent = 'Incluye 90 días SDI ($' + indemnizacion90Dias.toFixed(2) + ') + 20 días/año SDI ($' + veinteDiasPorAnio.toFixed(2) + ') + Prima Antigüedad ($' + primaAntiguedadTotal.toFixed(2) + ')';
+    if (dom.calcTotalFootnote) dom.calcTotalFootnote.textContent = 'Suma de indemnización constitucional, 20 días por año, prima de antigüedad y finiquito de prestaciones devengadas.';
+
+  } else if (causal === 'renuncia_voluntaria') {
+    // Renuncia voluntaria: Solo finiquito ordinario.
+    // Prima de antigüedad solo si antigüedad >= 15 años (Art. 162 Fracción III LFT)
+    let primaAplica = 0;
+    if (anios >= 15) {
+      primaAplica = primaAntiguedadTotal;
+      montoIndemnizacion = primaAplica;
+      if (dom.rowIndemnizacion) dom.rowIndemnizacion.style.display = 'flex';
+      if (dom.labelIndemnizacion) dom.labelIndemnizacion.textContent = 'Prima de Antigüedad (Art. 162 Fracc. III)';
+      if (dom.calcIndemnizacion) dom.calcIndemnizacion.textContent = `$${primaAplica.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN`;
+      if (dom.calcIndemnizacionFootnote) dom.calcIndemnizacionFootnote.textContent = `Aplica por cumplir más de 15 años de servicio (12 días/año topado a 2 SMG).`;
+    } else {
+      montoIndemnizacion = 0;
+      if (dom.rowIndemnizacion) dom.rowIndemnizacion.style.display = 'flex';
+      if (dom.labelIndemnizacion) dom.labelIndemnizacion.textContent = 'Indemnización Constitucional';
+      if (dom.calcIndemnizacion) dom.calcIndemnizacion.textContent = `$0.00 MXN (No aplica por renuncia)`;
+      if (dom.calcIndemnizacionFootnote) dom.calcIndemnizacionFootnote.textContent = `En renuncia voluntaria no aplica indemnización de 90 días ni prima de antigüedad (< 15 años de servicio, Art. 162 Fracc. III).`;
+    }
+    montoTotal = subtotalFiniquito + primaAplica;
+    if (dom.calcTotalFootnote) dom.calcTotalFootnote.textContent = 'Finiquito proporcional de ley (Vacaciones, Prima Vacacional y Aguinaldo). Sin penalización patronal.';
+
+  } else if (causal === 'rescision_patronal') {
+    // Art. 47 LFT: Rescisión laboral justificada por causa imputable al trabajador.
+    // No genera derecho a indemnización constitucional ni a los 20 días por año.
+    montoIndemnizacion = 0;
+    if (dom.rowIndemnizacion) dom.rowIndemnizacion.style.display = 'flex';
+    if (dom.labelIndemnizacion) dom.labelIndemnizacion.textContent = 'Indemnización Constitucional (Art. 47 LFT)';
+    if (dom.calcIndemnizacion) dom.calcIndemnizacion.textContent = `$0.00 MXN (Rescisión justificada)`;
+    if (dom.calcIndemnizacionFootnote) dom.calcIndemnizacionFootnote.textContent = `El patrón queda eximido de indemnización al acreditar causal grave del Art. 47 LFT. Solo se cubren prestaciones devengadas.`;
+    montoTotal = subtotalFiniquito;
+    if (dom.calcTotalFootnote) dom.calcTotalFootnote.textContent = 'Finiquito estricto de prestaciones devengadas e insolutas. Cero responsabilidad indemnizatoria para el patrón.';
+  }
+
+  // Actualizar valores en UI
   if (dom.calcDiasVacaciones) dom.calcDiasVacaciones.textContent = `${dias} días laborables`;
-  if (dom.calcVacacionesPago) dom.calcVacacionesPago.textContent = `$${pagoVacaciones.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN salario ordinario`;
+  if (dom.calcVacacionesPago) dom.calcVacacionesPago.textContent = `$${pagoVacaciones.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN (SDO: $${sdo.toFixed(2)}/día)`;
   if (dom.calcPrimaVacacional) dom.calcPrimaVacacional.textContent = `$${primaVacacional.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN`;
   if (dom.calcAguinaldo) dom.calcAguinaldo.textContent = `$${aguinaldo.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN`;
-  if (dom.calcIndemnizacion) dom.calcIndemnizacion.textContent = `$${liquidacion.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN aprox.`;
+  if (dom.calcSdi) dom.calcSdi.textContent = `$${sdi.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN / día`;
+  if (dom.calcFactorIntegracion) dom.calcFactorIntegracion.textContent = factorIntegracion.toFixed(5);
+  if (dom.calcMontoTotal) dom.calcMontoTotal.textContent = `$${montoTotal.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MXN`;
 }
 
 // ==============================================================================

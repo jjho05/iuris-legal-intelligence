@@ -12,10 +12,14 @@ class DictamenLegalSchema(BaseModel):
     tipo_instrumento: str = Field(default="contrato_servicios_profesionales", description="Clasificación del contrato")
     clausula_referenciada: str = Field(default="Cláusula analizada", description="Artículo o cláusula aplicable")
     nivel_riesgo_legal: str = Field(default="medio", description="Nivel de riesgo: alto, medio o bajo")
+    score_riesgo: Optional[int] = Field(default=65, description="Puntuación de riesgo de 0 a 100")
     penalizacion_estimada: str = Field(default="15% del valor convenido", description="Monto o porcentaje de sanción")
     penalizaciones_o_sanciones: Optional[str] = Field(default=None, description="Alias para compatibilidad")
+    plazos_o_vigencia: Optional[str] = Field(default="30 días naturales", description="Plazos o vigencia identificados")
+    partes_involucradas: Optional[list] = Field(default_factory=list, description="Partes contratantes")
     accion_recomendada: str = Field(default="Revisión formal con Dirección Jurídica", description="Recomendación preventiva")
     resumen_ejecutivo: Optional[str] = Field(default=None, description="Resumen conciso del caso")
+    clausulas_auditadas: Optional[list] = Field(default_factory=list, description="Detalle de cláusulas auditadas con semáforo y sugerencias")
 
 
 class LoRAStructuredAdapter:
@@ -54,8 +58,12 @@ class LoRAStructuredAdapter:
                 "tipo_instrumento": raw_json.get("tipo_instrumento", "contrato_servicios_profesionales"),
                 "clausula_referenciada": raw_json.get("clausula_referenciada", "Artículo 2 - Rescisión"),
                 "nivel_riesgo_legal": raw_json.get("nivel_riesgo_legal", "medio"),
+                "score_riesgo": raw_json.get("score_riesgo", 65),
                 "penalizacion_estimada": pen,
                 "penalizaciones_o_sanciones": pen,
+                "plazos_o_vigencia": raw_json.get("plazos_o_vigencia", "30 días naturales"),
+                "partes_involucradas": raw_json.get("partes_involucradas", ["Parte A", "Parte B"]),
                 "accion_recomendada": raw_json.get("accion_recomendada", "Revisión formal con Dirección Jurídica"),
-                "resumen_ejecutivo": texto_usuario[:120]
+                "resumen_ejecutivo": raw_json.get("resumen_ejecutivo") or texto_usuario[:120],
+                "clausulas_auditadas": raw_json.get("clausulas_auditadas", [])
             }

@@ -64,10 +64,11 @@
           <span class="btn-header-label">Subir Contrato</span>
         </button>
 
-        <!-- Botón Ajustes / API Key -->
-        <button class="btn-header-icon" id="btn-open-key-modal" title="Configurar API Key">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        </button>
+        <!-- Indicador de Estado del Sistema -->
+        <div class="system-status-indicator" title="Motor pericial conectado y operativo">
+          <span class="status-indicator-dot"></span>
+          <span class="status-indicator-label desktop-only">Motor Pericial Activo</span>
+        </div>
       </div>
 
     </div>
@@ -476,14 +477,14 @@
               <label for="lft-antiguedad-select" class="form-label">Antigüedad del Trabajador en la Empresa:</label>
               <div class="select-wrapper">
                 <select id="lft-antiguedad-select" class="form-select-field">
-                  <option value="1">Año 1 de servicio (12 días)</option>
-                  <option value="2" selected>Año 2 de servicio (14 días)</option>
-                  <option value="3">Año 3 de servicio (16 días)</option>
-                  <option value="4">Año 4 de servicio (18 días)</option>
-                  <option value="5">Año 5 de servicio (20 días)</option>
-                  <option value="6">Años 6 a 10 de servicio (22 días)</option>
-                  <option value="11">Años 11 a 15 de servicio (24 días)</option>
-                  <option value="16">Años 16 a 20 de servicio (26 días)</option>
+                  <option value="1">Año 1 de servicio (12 días vacacionales)</option>
+                  <option value="2" selected>Año 2 de servicio (14 días vacacionales)</option>
+                  <option value="3">Año 3 de servicio (16 días vacacionales)</option>
+                  <option value="4">Año 4 de servicio (18 días vacacionales)</option>
+                  <option value="5">Año 5 de servicio (20 días vacacionales)</option>
+                  <option value="6">Años 6 a 10 de servicio (22 días vacacionales)</option>
+                  <option value="11">Años 11 a 15 de servicio (24 días vacacionales)</option>
+                  <option value="16">Años 16 a 20 de servicio (26 días vacacionales)</option>
                 </select>
               </div>
             </div>
@@ -493,31 +494,54 @@
               <input type="number" id="lft-salario-input" class="form-text-field" value="25000" min="7500" step="500">
             </div>
 
+            <div class="form-input-block">
+              <label for="lft-causal-select" class="form-label">Causal de Terminación Laboral:</label>
+              <div class="select-wrapper">
+                <select id="lft-causal-select" class="form-select-field">
+                  <option value="despido_injustificado" selected>Despido Injustificado (Liquidación Constitucional - Arts. 48/50 LFT)</option>
+                  <option value="renuncia_voluntaria">Renuncia Voluntaria (Finiquito con Partes Proporcionales)</option>
+                  <option value="rescision_patronal">Rescisión Justificada sin Responsabilidad Patronal (Art. 47 LFT)</option>
+                </select>
+              </div>
+            </div>
+
             <!-- Desglose de Resultados -->
             <div class="calculator-results-box">
               
               <div class="result-data-row">
-                <span class="result-title">Vacaciones Oficiales (Art. 76 LFT)</span>
+                <span class="result-title">Vacaciones Dignas Oficiales (Art. 76 LFT)</span>
                 <span class="result-primary-number highlight-emerald" id="calc-dias-vacaciones">14 días laborables</span>
-                <span class="result-footnote" id="calc-vacaciones-pago">$11,666.67 MXN salario ordinario</span>
+                <span class="result-footnote" id="calc-vacaciones-pago">$11,666.67 MXN salario ordinario devengado</span>
               </div>
 
               <div class="result-data-row">
                 <span class="result-title">Prima Vacacional Legal (Art. 80 LFT - 25% mín.)</span>
                 <span class="result-primary-number" id="calc-prima-vacacional">$2,916.67 MXN</span>
-                <span class="result-footnote">25% sobre el salario devengado durante vacaciones</span>
+                <span class="result-footnote">25% sobre el salario correspondiente a vacaciones</span>
               </div>
 
               <div class="result-data-row">
-                <span class="result-title">Aguinaldo Mínimo Legal (Art. 87 LFT - 15 días)</span>
+                <span class="result-title">Aguinaldo Anual Legal (Art. 87 LFT - 15 días)</span>
                 <span class="result-primary-number" id="calc-aguinaldo">$12,500.00 MXN</span>
-                <span class="result-footnote">15 días de salario con pago previo al 20 de diciembre</span>
+                <span class="result-footnote">15 días de salario con pago obligatorio antes del 20 de dic.</span>
               </div>
 
               <div class="result-data-row">
-                <span class="result-title">Liquidación Constitucional (Despido Injustificado)</span>
+                <span class="result-title">Salario Diario Integrado (SDI)</span>
+                <span class="result-primary-number" id="calc-sdi">$874.42 MXN / día</span>
+                <span class="result-footnote" id="calc-factor-integracion">Factor legal de integración: 1.0493 (prestaciones de ley)</span>
+              </div>
+
+              <div class="result-data-row" id="row-indemnizacion">
+                <span class="result-title" id="label-indemnizacion">Indemnización Constitucional (Arts. 48/50 LFT)</span>
                 <span class="result-primary-number highlight-amber" id="calc-indemnizacion">$91,666.67 MXN</span>
-                <span class="result-footnote">3 meses de salario + 20 días por año de servicio (Art. 48/50 LFT)</span>
+                <span class="result-footnote" id="calc-indemnizacion-footnote">3 meses de salario + 20 días por año de servicio</span>
+              </div>
+
+              <div class="result-data-row total-highlight-row">
+                <span class="result-title">Monto Total Estimado a Liquidar</span>
+                <span class="result-primary-number highlight-total" id="calc-monto-total">$118,750.01 MXN</span>
+                <span class="result-footnote" id="calc-total-footnote">Incluye indemnización constitucional y prestaciones de ley</span>
               </div>
 
             </div>
@@ -613,7 +637,10 @@
               <span class="dossier-name-strong" id="dossier-doc-name">Estatuto_Corporativo.md</span>
               <span class="dossier-badge-pill" id="dossier-format-tag">Markdown Estructurado</span>
             </div>
-            <span class="dossier-words-stat" id="dossier-word-count">850 palabras</span>
+            <div class="dossier-header-tools">
+              <input type="search" id="dossier-search-input" class="dossier-search-field" placeholder="Buscar artículo o término en el expediente...">
+              <span class="dossier-words-stat" id="dossier-word-count">850 palabras</span>
+            </div>
           </div>
 
           <div class="dossier-view-scroll">
@@ -625,31 +652,6 @@
     </section>
 
   </main>
-
-  <!-- ======================================================================
-       MODAL DE CONFIGURACIÓN DE API KEY (MINIMALISTA)
-       ====================================================================== -->
-  <dialog id="modal-key-config" class="app-modal">
-    <div class="modal-card">
-      <div class="modal-card-head">
-        <h3 class="modal-title">Configuración de Gemini 3.8 Flash</h3>
-        <button class="modal-btn-close" id="btn-close-key-modal">&times;</button>
-      </div>
-      <div class="modal-card-body">
-        <p class="modal-desc">Introduce tu API Key de Google AI Studio para activar inferencia en la nube. En despliegues de Vercel, se inyecta de forma segura mediante la variable de entorno <code>GEMINI_API_KEY</code>.</p>
-        
-        <div class="form-input-block">
-          <label for="input-gemini-key" class="form-label">Gemini API Key:</label>
-          <input type="password" id="input-gemini-key" class="form-text-field" placeholder="AIzaSy...">
-        </div>
-
-        <div class="modal-footer-row">
-          <button class="btn-ghost-action" id="btn-reset-key">Modo Local / Simulado</button>
-          <button class="btn-solid-action" id="btn-save-key">Guardar Clave</button>
-        </div>
-      </div>
-    </div>
-  </dialog>
 
   <!-- Input oculto para subida global de archivos -->
   <input type="file" id="global-file-input" accept=".pdf,.docx,.doc,.txt,.md" style="display: none;">

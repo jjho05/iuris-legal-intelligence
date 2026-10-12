@@ -1667,6 +1667,27 @@ button, input, select, textarea {
   color: var(--text-subtle);
 }
 
+.dossier-search-box {
+  margin-bottom: 0.25rem;
+}
+
+.dossier-search-input {
+  width: 100%;
+  height: 32px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  color: var(--text-primary);
+  padding: 0 0.6rem;
+  font-size: 0.78rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.dossier-search-input:focus {
+  border-color: var(--accent-blue-light);
+}
+
 .dossier-nav-list {
   flex: 1;
   display: flex;
@@ -1896,4 +1917,37 @@ button, input, select, textarea {
   .desktop-only {
     display: flex !important;
   }
+}
+
+.btn-sm {
+  height: 32px !important;
+  padding: 0 0.75rem !important;
+  font-size: 0.78rem !important;
+  border-radius: var(--radius-xs) !important;
+}
+
+.dossier-meta-badge,
+.meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: var(--accent-blue-light);
+}
+
+.meta-pill.emerald {
+  background: var(--emerald-subtle);
+  border-color: var(--emerald-border);
+  color: var(--accent-emerald);
+}
+
+.meta-pill.amber {
+  background: var(--amber-subtle);
+  border-color: var(--amber-border);
+  color: var(--accent-amber);
 }
